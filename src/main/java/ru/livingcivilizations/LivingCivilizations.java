@@ -5,6 +5,7 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import ru.livingcivilizations.registry.ModBlocks;
 import ru.livingcivilizations.registry.ModEntities;
 import ru.livingcivilizations.registry.ModItems;
 
@@ -14,15 +15,24 @@ public class LivingCivilizations {
 
     public LivingCivilizations() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModItems.ITEMS.register(bus);
+        ModBlocks.BLOCKS.register(bus);
         ModEntities.ENTITY_TYPES.register(bus);
-        bus.addListener(this::addCreative);
+        ModItems.ITEMS.register(bus);
+        bus.addListener(this::addCreativeItems);
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES)
+    private void addCreativeItems(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.TRAVELERS_STAFF);
-        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
-            event.accept(ModItems.TRAVELER_SPAWN_EGG);
+            event.accept(ModItems.KINGDOM_MAP);
+        }
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            ModItems.spawnEggs().forEach(event::accept);
+        }
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(ModBlocks.DIRT_ROAD_ITEM);
+            event.accept(ModBlocks.GRAVEL_ROAD_ITEM);
+            event.accept(ModBlocks.PAVED_ROAD_ITEM);
+        }
     }
 }

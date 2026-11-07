@@ -1,5 +1,25 @@
 {
   "item.livingcivilizations.travelers_staff": "Посох путника",
+  "item.livingcivilizations.kingdom_map": "Карта королевств",
   "item.livingcivilizations.traveler_spawn_egg": "Яйцо призыва путешественника",
-  "entity.livingcivilizations.traveler": "Путешественник"
+  "item.livingcivilizations.caravan_merchant_spawn_egg": "Яйцо призыва караванного торговца",
+  "item.livingcivilizations.village_merchant_spawn_egg": "Яйцо призыва деревенского торговца",
+  "item.livingcivilizations.worker_spawn_egg": "Яйцо призыва работяги",
+  "item.livingcivilizations.guard_spawn_egg": "Яйцо призыва стражника",
+  "item.livingcivilizations.warrior_spawn_egg": "Яйцо призыва воина",
+  "item.livingcivilizations.lord_spawn_egg": "Яйцо призыва лорда",
+  "item.livingcivilizations.king_spawn_egg": "Яйцо призыва короля",
+  "item.livingcivilizations.bandit_spawn_egg": "Яйцо призыва разбойника",
+  "block.livingcivilizations.dirt_road": "Грязная дорога",
+  "block.livingcivilizations.gravel_road": "Обычная дорога",
+  "block.livingcivilizations.paved_road": "Мощёная дорога",
+  "entity.livingcivilizations.traveler": "Путешественник",
+  "entity.livingcivilizations.caravan_merchant": "Караванный торговец",
+  "entity.livingcivilizations.village_merchant": "Деревенский торговец",
+  "entity.livingcivilizations.worker": "Работяга",
+  "entity.livingcivilizations.guard": "Стражник",
+  "entity.livingcivilizations.warrior": "Воин",
+  "entity.livingcivilizations.lord": "Лорд",
+  "entity.livingcivilizations.king": "Король",
+  "entity.livingcivilizations.bandit": "Разбойник"
 }

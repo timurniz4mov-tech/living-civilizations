@@ -1,6 +1,6 @@
 package ru.livingcivilizations.client;
 
-import net.minecraft.client.model.VillagerModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -11,27 +11,26 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import ru.livingcivilizations.LivingCivilizations;
-import ru.livingcivilizations.entity.TravelerEntity;
+import ru.livingcivilizations.entity.CivilizationNpc;
 import ru.livingcivilizations.registry.ModEntities;
 
 @Mod.EventBusSubscriber(modid = LivingCivilizations.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> EntityRenderers.register(ModEntities.TRAVELER.get(), TravelerRenderer::new));
+        event.enqueueWork(() -> ModEntities.ENTITY_TYPES.getEntries().forEach(type ->
+                EntityRenderers.register(type.get(), PlayerLikeNpcRenderer::new)));
     }
 
-    private static class TravelerRenderer extends MobRenderer<TravelerEntity, VillagerModel<TravelerEntity>> {
-        private static final ResourceLocation TEXTURE =
-            new ResourceLocation("minecraft", "textures/entity/villager/villager.png");
-
-        private TravelerRenderer(EntityRendererProvider.Context context) {
-            super(context, new VillagerModel<>(context.bakeLayer(ModelLayers.VILLAGER)), 0.5F);
+    private static class PlayerLikeNpcRenderer extends MobRenderer<CivilizationNpc, PlayerModel<CivilizationNpc>> {
+        private PlayerLikeNpcRenderer(EntityRendererProvider.Context context) {
+            super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0.5F);
         }
 
         @Override
-        public ResourceLocation getTextureLocation(TravelerEntity entity) {
-            return TEXTURE;
+        public ResourceLocation getTextureLocation(CivilizationNpc entity) {
+            return new ResourceLocation(LivingCivilizations.MOD_ID,
+                    "textures/entity/" + entity.getRole().id() + ".png");
         }
     }
 }

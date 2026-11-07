@@ -4,10 +4,10 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="livingcivilizations"
-version="0.2.0"
-displayName="Living Civilizations"
+version="0.3.0-beta"
+displayName="Живые цивилизации"
 authors="LivingCivilizations"
-description='''A living medieval world of travelers and kingdoms.'''
+description='''Средневековый мир с NPC в стиле игроков, торговлей, дорогами, разбойниками и королевствами.'''
 
 [[dependencies.livingcivilizations]]
 modId="forge"

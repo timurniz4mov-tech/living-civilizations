@@ -1,5 +1,25 @@
 {
   "item.livingcivilizations.travelers_staff": "Traveler's Staff",
+  "item.livingcivilizations.kingdom_map": "Kingdom Map",
   "item.livingcivilizations.traveler_spawn_egg": "Traveler Spawn Egg",
-  "entity.livingcivilizations.traveler": "Traveler"
+  "item.livingcivilizations.caravan_merchant_spawn_egg": "Caravan Merchant Spawn Egg",
+  "item.livingcivilizations.village_merchant_spawn_egg": "Village Merchant Spawn Egg",
+  "item.livingcivilizations.worker_spawn_egg": "Worker Spawn Egg",
+  "item.livingcivilizations.guard_spawn_egg": "Guard Spawn Egg",
+  "item.livingcivilizations.warrior_spawn_egg": "Warrior Spawn Egg",
+  "item.livingcivilizations.lord_spawn_egg": "Lord Spawn Egg",
+  "item.livingcivilizations.king_spawn_egg": "King Spawn Egg",
+  "item.livingcivilizations.bandit_spawn_egg": "Bandit Spawn Egg",
+  "block.livingcivilizations.dirt_road": "Dirt Road",
+  "block.livingcivilizations.gravel_road": "Gravel Road",
+  "block.livingcivilizations.paved_road": "Paved Road",
+  "entity.livingcivilizations.traveler": "Traveler",
+  "entity.livingcivilizations.caravan_merchant": "Caravan Merchant",
+  "entity.livingcivilizations.village_merchant": "Village Merchant",
+  "entity.livingcivilizations.worker": "Worker",
+  "entity.livingcivilizations.guard": "Guard",
+  "entity.livingcivilizations.warrior": "Warrior",
+  "entity.livingcivilizations.lord": "Lord",
+  "entity.livingcivilizations.king": "King",
+  "entity.livingcivilizations.bandit": "Bandit"
 }
