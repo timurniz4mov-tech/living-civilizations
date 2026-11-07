@@ -18,8 +18,17 @@ import ru.livingcivilizations.registry.ModEntities;
 public class ClientModEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> ModEntities.ENTITY_TYPES.getEntries().forEach(type ->
-                EntityRenderers.register(type.get(), PlayerLikeNpcRenderer::new)));
+        event.enqueueWork(() -> {
+            EntityRenderers.register(ModEntities.TRAVELER.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.CARAVAN_MERCHANT.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.VILLAGE_MERCHANT.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.WORKER.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.GUARD.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.WARRIOR.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.LORD.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.KING.get(), PlayerLikeNpcRenderer::new);
+            EntityRenderers.register(ModEntities.BANDIT.get(), PlayerLikeNpcRenderer::new);
+        });
     }
 
     private static class PlayerLikeNpcRenderer extends MobRenderer<CivilizationNpc, PlayerModel<CivilizationNpc>> {
