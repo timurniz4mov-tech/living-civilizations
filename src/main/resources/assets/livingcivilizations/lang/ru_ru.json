@@ -1,3 +1,5 @@
 {
-  "item.livingcivilizations.travelers_staff": "Посох путника"
+  "item.livingcivilizations.travelers_staff": "Посох путника",
+  "item.livingcivilizations.traveler_spawn_egg": "Яйцо призыва путешественника",
+  "entity.livingcivilizations.traveler": "Путешественник"
 }

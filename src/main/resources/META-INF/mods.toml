@@ -4,10 +4,10 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="livingcivilizations"
-version="0.1.0"
+version="0.2.0"
 displayName="Living Civilizations"
-authors="YourName"
-description='''A living medieval world of travelers, villages and kingdoms.'''
+authors="LivingCivilizations"
+description='''A living medieval world of travelers and kingdoms.'''
 
 [[dependencies.livingcivilizations]]
 modId="forge"

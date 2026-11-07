@@ -1,3 +1,5 @@
 {
-  "item.livingcivilizations.travelers_staff": "Traveler's Staff"
+  "item.livingcivilizations.travelers_staff": "Traveler's Staff",
+  "item.livingcivilizations.traveler_spawn_egg": "Traveler Spawn Egg",
+  "entity.livingcivilizations.traveler": "Traveler"
 }
