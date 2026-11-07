@@ -21,5 +21,8 @@
   "entity.livingcivilizations.warrior": "Warrior",
   "entity.livingcivilizations.lord": "Lord",
   "entity.livingcivilizations.king": "King",
-  "entity.livingcivilizations.bandit": "Bandit"
+  "entity.livingcivilizations.bandit": "Bandit",
+  "block.livingcivilizations.dirt_road_full": "Full Dirt Road",
+  "block.livingcivilizations.gravel_road_full": "Full Gravel Road",
+  "block.livingcivilizations.paved_road_full": "Full Paved Road"
 }

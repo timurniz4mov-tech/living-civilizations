@@ -33,6 +33,9 @@ public class LivingCivilizations {
             event.accept(ModItems.DIRT_ROAD_ITEM);
             event.accept(ModItems.GRAVEL_ROAD_ITEM);
             event.accept(ModItems.PAVED_ROAD_ITEM);
+            event.accept(ModItems.DIRT_ROAD_FULL_ITEM);
+            event.accept(ModItems.GRAVEL_ROAD_FULL_ITEM);
+            event.accept(ModItems.PAVED_ROAD_FULL_ITEM);
         }
     }
 }

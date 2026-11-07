@@ -26,6 +26,12 @@ public class ModItems {
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.GRAVEL_ROAD.get(), new Item.Properties()));
     public static final RegistryObject<Item> PAVED_ROAD_ITEM = ITEMS.register("paved_road",
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.PAVED_ROAD.get(), new Item.Properties()));
+    public static final RegistryObject<Item> DIRT_ROAD_FULL_ITEM = ITEMS.register("dirt_road_full",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.DIRT_ROAD_FULL.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GRAVEL_ROAD_FULL_ITEM = ITEMS.register("gravel_road_full",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.GRAVEL_ROAD_FULL.get(), new Item.Properties()));
+    public static final RegistryObject<Item> PAVED_ROAD_FULL_ITEM = ITEMS.register("paved_road_full",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.PAVED_ROAD_FULL.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> TRAVELER_EGG = egg("traveler_spawn_egg", ModEntities.TRAVELER, 0x725039, 0xD8B77B);
     public static final RegistryObject<Item> CARAVAN_MERCHANT_EGG = egg("caravan_merchant_spawn_egg", ModEntities.CARAVAN_MERCHANT, 0x6A3F27, 0xD5A94E);

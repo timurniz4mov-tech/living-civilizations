@@ -21,5 +21,8 @@
   "entity.livingcivilizations.warrior": "Воин",
   "entity.livingcivilizations.lord": "Лорд",
   "entity.livingcivilizations.king": "Король",
-  "entity.livingcivilizations.bandit": "Разбойник"
+  "entity.livingcivilizations.bandit": "Разбойник",
+  "block.livingcivilizations.dirt_road_full": "Грязная дорога (полный блок)",
+  "block.livingcivilizations.gravel_road_full": "Обычная дорога (полный блок)",
+  "block.livingcivilizations.paved_road_full": "Мощёная дорога (полный блок)"
 }

@@ -137,10 +137,16 @@ public class CivilizationCommands {
                             case "dirt" -> ModBlocks.DIRT_ROAD.get();
                             case "gravel" -> ModBlocks.GRAVEL_ROAD.get();
                             case "paved" -> ModBlocks.PAVED_ROAD.get();
+                            case "dirt_half" -> ModBlocks.DIRT_ROAD.get();
+                            case "gravel_half" -> ModBlocks.GRAVEL_ROAD.get();
+                            case "paved_half" -> ModBlocks.PAVED_ROAD.get();
+                            case "dirt_full" -> ModBlocks.DIRT_ROAD_FULL.get();
+                            case "gravel_full" -> ModBlocks.GRAVEL_ROAD_FULL.get();
+                            case "paved_full" -> ModBlocks.PAVED_ROAD_FULL.get();
                             default -> null;
                         };
                         if (block == null) {
-                            ctx.getSource().sendFailure(Component.literal("Типы: dirt, gravel, paved"));
+                            ctx.getSource().sendFailure(Component.literal("Типы: dirt_half, gravel_half, paved_half, dirt_full, gravel_full, paved_full (dirt/gravel/paved — старые названия для тонкой дороги)"));
                             return 0;
                         }
                         int length = IntegerArgumentType.getInteger(ctx, "length");

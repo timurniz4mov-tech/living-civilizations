@@ -1,19 +1,12 @@
-# Medieval player-skin sources
+# NameMC Medieval / Adventurer skin references
 
-The GitHub Actions workflow downloads real 64x64 **Classic / Steve-arm** PNG skins before Gradle compiles the mod. Each source is assigned to one NPC role. If one URL is temporarily unavailable, its bundled fallback PNG remains.
+The build workflow downloads Classic 64x64 player skin PNGs from NameMC using its public skin texture endpoint. These skin pages are included as source references:
 
-PixelPelt states that all original skins on its catalog are free to use, edit, share and sell without attribution. Reference: https://freeskineditor.com/minecraft-skins/ . The site's format guide confirms that Classic skins use 4-pixel arms and are 64x64 PNGs.
+- Adventurer tag: https://namemc.com/skin/d39df4264a1139ba
+- Medieval + Adventurer collection: https://namemc.com/minecraft-skins/tag/medieval%2Badventurer
+- NikiNY (Medieval): https://namemc.com/skin/ee7b29a28b900600
+- Demacratic (Knight, Medieval): https://namemc.com/skin/f9bb3d5b5962982a
+- Tower_Defense25 (Medieval): https://namemc.com/skin/3cfd8cd8bd6d0020
+- Sodly (King, Medieval, Royal): https://namemc.com/skin/d348732fe5e216b2
 
-| NPC role | Skin design | Page |
-|---|---|---|
-| Traveler | Viking raider | https://freeskineditor.com/minecraft-skins/viking-raider/ |
-| Caravan merchant | Pirate captain | https://freeskineditor.com/minecraft-skins/pirate-captain/ |
-| Village merchant | Farmer boy | https://freeskineditor.com/minecraft-skins/farmer-boy/ |
-| Worker | Lumberjack | https://freeskineditor.com/minecraft-skins/lumberjack/ |
-| Guard | Young knight | https://freeskineditor.com/minecraft-skins/young-knight/ |
-| Warrior | Flame knight | https://freeskineditor.com/minecraft-skins/flame-knight/ |
-| Lord | Royal gown | https://freeskineditor.com/minecraft-skins/royal-gown/ |
-| King | Shadow king | https://freeskineditor.com/minecraft-skins/shadow-king/ |
-| Bandit | Masked rogue | https://freeskineditor.com/minecraft-skins/masked-rogue/ |
-
-Direct Classic PNG links are defined in `scripts/download-medieval-skins.sh`. The role texture names match the renderer (`traveler.png`, `king.png`, and so on).
+The script maps nine NameMC skin IDs to NPC roles. NameMC is a community skin catalog; individual skin creators retain rights to their uploads. Keep creator/source credits when redistributing the mod and seek permission for public modpack or commercial use. Four supplied 64x64 image sheets are bundled as local fallbacks for traveler, caravan merchant, worker and guard. If NameMC blocks or rate-limits a download, the fallback texture remains.

@@ -40,8 +40,14 @@ public class CivilizationNpc extends PathfinderMob {
                 this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
                 this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
             }
+            case WORKER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.IRON_AXE));
+            }
             case BANDIT -> {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_AXE));
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
+                this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
                 this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
             }
             case LORD -> {
@@ -88,7 +94,17 @@ public class CivilizationNpc extends PathfinderMob {
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
             if (role == NpcRole.BANDIT) {
-                this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
+                // Bandits hunt players and non-bandit civilization people: traders, workers,
+                // travelers, guards and nobles. Other bandits are ignored.
+                this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
+                        this, CivilizationNpc.class, 10, true, false,
+                        target -> target instanceof CivilizationNpc other && other.getRole() != NpcRole.BANDIT));
+                this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true));
+            } else {
+                // Guards and warriors defend settlements against bandits.
+                this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
+                        this, CivilizationNpc.class, 10, true, false,
+                        target -> target instanceof CivilizationNpc other && other.getRole() == NpcRole.BANDIT));
             }
         }
         double speed = (role == NpcRole.TRAVELER || role == NpcRole.CARAVAN_MERCHANT) ? 1.05D : 0.8D;

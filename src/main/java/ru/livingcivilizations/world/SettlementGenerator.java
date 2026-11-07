@@ -24,7 +24,7 @@ public final class SettlementGenerator {
     public static boolean generateNear(ServerLevel level, BlockPos origin, boolean force) {
         if (level.dimension() != Level.OVERWORLD) return false;
         SettlementSavedData saved = SettlementSavedData.get(level);
-        if (!force && saved.hasNearby(origin, 560)) return false;
+        if (!force && saved.hasNearby(origin, 320)) return false;
 
         BlockPos center = findSite(level, origin, force);
         if (center == null) return false;
@@ -71,6 +71,7 @@ public final class SettlementGenerator {
         spawn(level, ModEntities.VILLAGE_MERCHANT.get(), center.offset(3, 1, 2));
         spawn(level, ModEntities.CARAVAN_MERCHANT.get(), center.offset(5, 1, 2));
         spawn(level, ModEntities.WORKER.get(), center.offset(17, 1, -2));
+        spawn(level, ModEntities.WORKER.get(), center.offset(-16, 1, 3));
         spawn(level, ModEntities.GUARD.get(), center.offset(-3, 1, -14));
         spawn(level, ModEntities.GUARD.get(), center.offset(3, 1, 14));
         spawn(level, ModEntities.TRAVELER.get(), center.offset(0, 1, -21));
@@ -94,6 +95,69 @@ public final class SettlementGenerator {
         }
 
         saved.add(center);
+        return true;
+    }
+
+    /**
+     * Lets a worker expand a settlement with one small timber house.
+     * Each worker completes at most one house; the saved entity tag prevents repeats
+     * after the world is reloaded.
+     */
+    public static boolean tryWorkerBuildHouse(ServerLevel level, CivilizationNpc worker) {
+        if (worker.getRole() != ru.livingcivilizations.entity.NpcRole.WORKER) return false;
+        net.minecraft.nbt.CompoundTag data = worker.getPersistentData();
+        if (data.getBoolean("LC_HouseBuilt")) return false;
+        long now = level.getGameTime();
+        if (now < data.getLong("LC_NextHouseTry")) return false;
+        data.putLong("LC_NextHouseTry", now + 2400L);
+
+        // Builders only expand a known village, not random wilderness.
+        if (!SettlementSavedData.get(level).hasNearby(worker.blockPosition(), 150)) return false;
+
+        for (int attempt = 0; attempt < 12; attempt++) {
+            double angle = level.random.nextDouble() * Math.PI * 2.0D;
+            int distance = 9 + level.random.nextInt(7);
+            int x = worker.blockPosition().getX() + (int) Math.round(Math.cos(angle) * distance);
+            int z = worker.blockPosition().getZ() + (int) Math.round(Math.sin(angle) * distance);
+            BlockPos base = findTerrainGround(level, x, z);
+            if (base == null || !isWorkerHouseSiteClear(level, base)) continue;
+
+            prepareSmallClearing(level, base, 4);
+            Direction front = Direction.SOUTH;
+            buildHouse(level, base, front);
+            // Add a short dirt path from the doorway to the village route.
+            for (int i = 1; i <= 5; i++) {
+                BlockPos path = base.relative(front, 3 + i);
+                placeRoad(level, path, 0, 0, ModBlocks.DIRT_ROAD.get());
+            }
+            worker.swing(net.minecraft.world.InteractionHand.MAIN_HAND, true);
+            data.putBoolean("LC_HouseBuilt", true);
+            worker.setCustomName(net.minecraft.network.chat.Component.literal("Строитель"));
+            worker.setCustomNameVisible(false);
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isWorkerHouseSiteClear(ServerLevel level, BlockPos center) {
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        for (int x = -4; x <= 4; x += 2) {
+            for (int z = -4; z <= 4; z += 2) {
+                BlockPos ground = findTerrainGround(level, center.getX() + x, center.getZ() + z);
+                if (ground == null || !level.hasChunkAt(ground)) return false;
+                if (!level.getFluidState(ground).isEmpty()) return false;
+                minY = Math.min(minY, ground.getY());
+                maxY = Math.max(maxY, ground.getY());
+                if (maxY - minY > 2) return false;
+                for (int y = 1; y <= 5; y++) {
+                    BlockPos above = new BlockPos(ground.getX(), center.getY() + y, ground.getZ());
+                    BlockState state = level.getBlockState(above);
+                    if (!state.isAir() && !state.canBeReplaced()
+                            && !state.is(BlockTags.LEAVES) && !state.is(BlockTags.LOGS)) return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -141,7 +205,7 @@ public final class SettlementGenerator {
                 if (ground == null || !level.getFluidState(ground).isEmpty()) return false;
                 minY = Math.min(minY, ground.getY());
                 maxY = Math.max(maxY, ground.getY());
-                if (maxY - minY > 5) return false;
+                if (maxY - minY > 7) return false;
             }
         }
 

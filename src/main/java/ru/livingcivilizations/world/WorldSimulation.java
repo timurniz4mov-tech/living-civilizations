@@ -3,6 +3,7 @@ package ru.livingcivilizations.world;
 import java.util.List;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import ru.livingcivilizations.LivingCivilizations;
 import ru.livingcivilizations.entity.CivilizationNpc;
+import ru.livingcivilizations.entity.NpcRole;
 import ru.livingcivilizations.registry.ModEntities;
 
 @Mod.EventBusSubscriber(modid = LivingCivilizations.MOD_ID)
@@ -30,47 +32,58 @@ public class WorldSimulation {
         if (level.dimension() != Level.OVERWORLD) return;
         long time = level.getGameTime();
 
-        // Ambient NPCs appear around explored areas, with a hard local cap.
-        if (time % 1200L == 300L) {
+        // A few more wanderers in explored areas. The local cap prevents crowding.
+        if (time % 600L == 300L) {
             for (Player player : level.players()) spawnAmbient(level, player);
         }
 
-        // Try at most once every 30 seconds until a settlement is successfully created.
-        // Using loaded chunks close to the player avoids failed attempts in unloaded terrain.
-        if (time % 600L == 20L) {
+        // Try a new settlement every 10 seconds. Villages may be closer than before,
+        // but still cannot overlap: saved centers are kept at least 320 blocks apart.
+        if (time % 200L == 20L) {
+            SettlementSavedData saved = SettlementSavedData.get(level);
             for (Player player : level.players()) {
-                if (!SettlementSavedData.get(level).hasNearby(player.blockPosition(), 560)) {
+                if (!saved.hasNearby(player.blockPosition(), 320)) {
                     if (SettlementGenerator.generateNear(level, player.blockPosition(), false)) {
                         player.displayClientMessage(net.minecraft.network.chat.Component.literal(
                                 "§6Живые цивилизации: §fнеподалёку основано новое поселение!"), false);
+                        break; // one new village globally per attempt
                     }
-                    break;
                 }
             }
         }
 
-        // Bandit hideouts are occasional, persistent structures in the wilderness.
-        if (time % 12000L == 600L) {
+        // Workers living in settlements occasionally expand them with another small house.
+        if (time % 2400L == 400L) {
             for (Player player : level.players()) {
-                if (level.random.nextInt(3) == 0) buildBanditCamp(level, player);
+                AABB area = player.getBoundingBox().inflate(64);
+                for (CivilizationNpc npc : level.getEntitiesOfClass(CivilizationNpc.class, area,
+                        entity -> entity.getRole() == NpcRole.WORKER)) {
+                    if (SettlementGenerator.tryWorkerBuildHouse(level, npc)) break;
+                }
+            }
+        }
+
+        // Bandit camps are more common than before, but still uncommon enough to feel special.
+        if (time % 8000L == 600L) {
+            for (Player player : level.players()) {
+                if (level.random.nextInt(2) == 0) buildBanditCamp(level, player);
             }
         }
     }
 
     private static void spawnAmbient(ServerLevel level, Player player) {
         AABB area = player.getBoundingBox().inflate(64);
-        if (level.getEntitiesOfClass(CivilizationNpc.class, area).size() >= 14) return;
-        BlockPos air = randomSurface(level, player.blockPosition(), 22, 42);
+        if (level.getEntitiesOfClass(CivilizationNpc.class, area).size() >= 18) return;
+        BlockPos air = randomSurface(level, player.blockPosition(), 18, 40);
         if (air == null) return;
         EntityType<CivilizationNpc> type = AMBIENT.get(level.random.nextInt(AMBIENT.size())).get();
         spawn(level, type, air);
     }
 
     private static void buildBanditCamp(ServerLevel level, Player player) {
-        BlockPos air = randomSurface(level, player.blockPosition(), 48, 76);
+        BlockPos air = randomSurface(level, player.blockPosition(), 42, 68);
         if (air == null) return;
         BlockPos ground = air.below();
-        // Ground all camp blocks on the terrain surface, not in the air above it.
         for (int x = -3; x <= 3; x++) for (int z = -3; z <= 3; z++) {
             level.setBlock(ground.offset(x, 0, z), Blocks.COARSE_DIRT.defaultBlockState(), 3);
         }
@@ -95,18 +108,16 @@ public class WorldSimulation {
         BlockPos supportPos = feetBlock.below();
         double supportHeight = level.getBlockState(supportPos)
                 .getCollisionShape(level, supportPos, net.minecraft.world.phys.shapes.CollisionContext.empty())
-                .max(net.minecraft.core.Direction.Axis.Y);
+                .max(Direction.Axis.Y);
         if (supportHeight <= 0.0D) supportHeight = 1.0D;
-        double y = supportPos.getY() + supportHeight;
-        npc.moveTo(feetBlock.getX() + 0.5D, y, feetBlock.getZ() + 0.5D,
+        npc.moveTo(feetBlock.getX() + 0.5D, supportPos.getY() + supportHeight, feetBlock.getZ() + 0.5D,
                 level.random.nextFloat() * 360F, 0F);
         npc.setPersistenceRequired();
         level.addFreshEntity(npc);
     }
 
-    /** Returns the first air block above a safe solid surface. */
     private static BlockPos randomSurface(ServerLevel level, BlockPos origin, int min, int max) {
-        for (int attempt = 0; attempt < 18; attempt++) {
+        for (int attempt = 0; attempt < 24; attempt++) {
             int dx = level.random.nextInt(max * 2 + 1) - max;
             int dz = level.random.nextInt(max * 2 + 1) - max;
             if (dx * dx + dz * dz < min * min) continue;
