@@ -61,3 +61,7 @@ GitHub Actions скачивает 64x64 PNG-скины из подборки Nam
 ## Команды дорог
 Синтаксис: `/civilizations roads <type> <length>`.
 Типы: `dirt`, `gravel`, `paved` (старые короткие названия для тонких дорог), `dirt_half`, `gravel_half`, `paved_half`, `dirt_full`, `gravel_full`, `paved_full`.
+
+
+## Исправление 0.6.1-beta
+Исправлена совместимость конструктора `HumanoidArmorLayer` с Minecraft 1.20.1 / Forge 47: добавлен обязательный `ModelManager` из renderer context. Рендерер предметов в руках NPC сохранён.

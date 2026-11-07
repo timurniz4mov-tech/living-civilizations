@@ -40,7 +40,8 @@ public class ClientModEvents {
             this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
             this.addLayer(new HumanoidArmorLayer<>(this,
                     new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
-                    new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
+                    new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)),
+                    context.getModelManager()));
         }
 
         @Override
