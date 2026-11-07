@@ -18,6 +18,15 @@ public class ModItems {
     public static final RegistryObject<Item> KINGDOM_MAP = ITEMS.register("kingdom_map",
             () -> new KingdomMapItem(new Item.Properties()));
 
+    // Road blocks are registered separately from their block items to avoid
+    // DeferredRegister class-initialization cycles.
+    public static final RegistryObject<Item> DIRT_ROAD_ITEM = ITEMS.register("dirt_road",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.DIRT_ROAD.get(), new Item.Properties()));
+    public static final RegistryObject<Item> GRAVEL_ROAD_ITEM = ITEMS.register("gravel_road",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.GRAVEL_ROAD.get(), new Item.Properties()));
+    public static final RegistryObject<Item> PAVED_ROAD_ITEM = ITEMS.register("paved_road",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.PAVED_ROAD.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> TRAVELER_EGG = egg("traveler_spawn_egg", ModEntities.TRAVELER, 0x725039, 0xD8B77B);
     public static final RegistryObject<Item> CARAVAN_MERCHANT_EGG = egg("caravan_merchant_spawn_egg", ModEntities.CARAVAN_MERCHANT, 0x6A3F27, 0xD5A94E);
     public static final RegistryObject<Item> VILLAGE_MERCHANT_EGG = egg("village_merchant_spawn_egg", ModEntities.VILLAGE_MERCHANT, 0x8A5B32, 0xE7C77A);
@@ -32,10 +41,6 @@ public class ModItems {
             RegistryObject<net.minecraft.world.entity.EntityType<ru.livingcivilizations.entity.CivilizationNpc>> type,
             int primary, int secondary) {
         return ITEMS.register(id, () -> new ForgeSpawnEggItem(type, primary, secondary, new Item.Properties()));
-    }
-
-    public static RegistryObject<Item> blockItem(String id, RegistryObject<net.minecraft.world.level.block.Block> block) {
-        return ITEMS.register(id, () -> new net.minecraft.world.item.BlockItem(block.get(), new Item.Properties()));
     }
 
     public static List<RegistryObject<Item>> spawnEggs() {

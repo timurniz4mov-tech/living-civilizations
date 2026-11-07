@@ -4,7 +4,7 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="livingcivilizations"
-version="0.3.0-beta"
+version="0.5.0-beta"
 displayName="Живые цивилизации"
 authors="LivingCivilizations"
 description='''Средневековый мир с NPC в стиле игроков, торговлей, дорогами, разбойниками и королевствами.'''

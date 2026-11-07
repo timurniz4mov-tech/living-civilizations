@@ -30,9 +30,9 @@ public class LivingCivilizations {
             ModItems.spawnEggs().forEach(event::accept);
         }
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(ModBlocks.DIRT_ROAD_ITEM);
-            event.accept(ModBlocks.GRAVEL_ROAD_ITEM);
-            event.accept(ModBlocks.PAVED_ROAD_ITEM);
+            event.accept(ModItems.DIRT_ROAD_ITEM);
+            event.accept(ModItems.GRAVEL_ROAD_ITEM);
+            event.accept(ModItems.PAVED_ROAD_ITEM);
         }
     }
 }

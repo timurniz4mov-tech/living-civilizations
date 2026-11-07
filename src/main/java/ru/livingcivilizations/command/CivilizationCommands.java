@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import ru.livingcivilizations.LivingCivilizations;
 import ru.livingcivilizations.kingdom.KingdomSavedData;
 import ru.livingcivilizations.registry.ModBlocks;
+import ru.livingcivilizations.world.SettlementGenerator;
 
 @Mod.EventBusSubscriber(modid = LivingCivilizations.MOD_ID)
 public class CivilizationCommands {
@@ -94,6 +95,16 @@ public class CivilizationCommands {
                     }
                 }
                 return 1;
+            }))
+            .then(Commands.literal("settlement").executes(ctx -> {
+                ServerPlayer player = ctx.getSource().getPlayerOrException();
+                boolean generated = SettlementGenerator.generateNear(player.serverLevel(), player.blockPosition(), true);
+                if (generated) {
+                    ctx.getSource().sendSuccess(() -> Component.literal("Поселение построено неподалёку. Осмотрись вокруг!"), true);
+                    return 1;
+                }
+                ctx.getSource().sendFailure(Component.literal("Не нашлось ровной площадки рядом. Попробуй на равнине."));
+                return 0;
             }))
             .then(Commands.literal("castle").executes(ctx -> {
                 ServerPlayer player = ctx.getSource().getPlayerOrException();
