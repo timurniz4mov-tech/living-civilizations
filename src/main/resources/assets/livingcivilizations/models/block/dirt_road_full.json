@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "livingcivilizations:block/dirt_road"
+    "all": "minecraft:block/coarse_dirt"
   }
 }

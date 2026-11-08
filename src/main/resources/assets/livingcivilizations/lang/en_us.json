@@ -10,9 +10,9 @@
   "item.livingcivilizations.lord_spawn_egg": "Lord Spawn Egg",
   "item.livingcivilizations.king_spawn_egg": "King Spawn Egg",
   "item.livingcivilizations.bandit_spawn_egg": "Bandit Spawn Egg",
-  "block.livingcivilizations.dirt_road": "Dirt Road",
-  "block.livingcivilizations.gravel_road": "Gravel Road",
-  "block.livingcivilizations.paved_road": "Paved Road",
+  "block.livingcivilizations.dirt_road": "Full Dirt Road",
+  "block.livingcivilizations.gravel_road": "Full Gravel Road",
+  "block.livingcivilizations.paved_road": "Full Paved Road",
   "entity.livingcivilizations.traveler": "Traveler",
   "entity.livingcivilizations.caravan_merchant": "Caravan Merchant",
   "entity.livingcivilizations.village_merchant": "Village Merchant",
@@ -24,5 +24,10 @@
   "entity.livingcivilizations.bandit": "Bandit",
   "block.livingcivilizations.dirt_road_full": "Full Dirt Road",
   "block.livingcivilizations.gravel_road_full": "Full Gravel Road",
-  "block.livingcivilizations.paved_road_full": "Full Paved Road"
+  "block.livingcivilizations.paved_road_full": "Full Paved Road",
+  "block.livingcivilizations.dirt_road_half": "Thin Dirt Path",
+  "block.livingcivilizations.gravel_road_half": "Thin Gravel Path",
+  "block.livingcivilizations.paved_road_half": "Thin Paved Path",
+  "key.livingcivilizations.open_map": "Open kingdom minimap",
+  "key.categories.livingcivilizations": "Living Civilizations"
 }

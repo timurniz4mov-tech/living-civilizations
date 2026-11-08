@@ -17,6 +17,8 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import java.util.Comparator;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -29,6 +31,7 @@ public class CivilizationNpc extends PathfinderMob {
         super(type, level);
         this.role = role;
         this.setCanPickUpLoot(role == NpcRole.BANDIT || role == NpcRole.WARRIOR);
+        registerRoleCombatGoals();
         switch (role) {
             case GUARD -> {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
@@ -81,36 +84,68 @@ public class CivilizationNpc extends PathfinderMob {
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 24.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.FOLLOW_RANGE, 40.0D)
+                .add(Attributes.ATTACK_DAMAGE, 5.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.05D);
+    }
+
+    private void registerRoleCombatGoals() {
+        if (role == NpcRole.BANDIT) {
+            this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.18D, true));
+            this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CivilizationNpc.class, 10,
+                    true, false, target -> target.getRole() != NpcRole.BANDIT));
+            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10,
+                    true, false, target -> !target.isCreative() && !target.isSpectator()));
+            this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Monster.class, true));
+        } else if (role == NpcRole.GUARD || role == NpcRole.WARRIOR) {
+            this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.12D, true));
+            this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CivilizationNpc.class, 10,
+                    true, false, target -> target.getRole() == NpcRole.BANDIT));
+            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true));
+        }
     }
 
     @Override
     protected void registerGoals() {
+        // Role can still be null while the Mob constructor invokes this override.
+        // Add only role-independent goals here.
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        if (role == NpcRole.GUARD || role == NpcRole.WARRIOR || role == NpcRole.BANDIT) {
-            this.goalSelector.addGoal(1, new MeleeAttackGoal(this, role == NpcRole.BANDIT ? 1.15D : 1.0D, true));
-            this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
-            if (role == NpcRole.BANDIT) {
-                // Bandits hunt players and non-bandit civilization people: traders, workers,
-                // travelers, guards and nobles. Other bandits are ignored.
-                this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-                        this, CivilizationNpc.class, 10, true, false,
-                        target -> target instanceof CivilizationNpc other && other.getRole() != NpcRole.BANDIT));
-                this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true));
-            } else {
-                // Guards and warriors defend settlements against bandits.
-                this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-                        this, CivilizationNpc.class, 10, true, false,
-                        target -> target instanceof CivilizationNpc other && other.getRole() == NpcRole.BANDIT));
-            }
-        }
-        double speed = (role == NpcRole.TRAVELER || role == NpcRole.CARAVAN_MERCHANT) ? 1.05D : 0.8D;
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, speed));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.85D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.level().isClientSide || this.tickCount % 15 != 0 || (this.getTarget() != null && this.getTarget().isAlive())) return;
+
+        if (role == NpcRole.BANDIT) {
+            CivilizationNpc civilian = this.level().getEntitiesOfClass(CivilizationNpc.class,
+                    this.getBoundingBox().inflate(22.0D),
+                    other -> other != this && other.isAlive() && other.getRole() != NpcRole.BANDIT)
+                    .stream().min(Comparator.comparingDouble(this::distanceToSqr)).orElse(null);
+            Player player = this.level().getNearestPlayer(this, 20.0D);
+            if (player != null && (player.isCreative() || player.isSpectator())) player = null;
+            if (civilian != null && (player == null || this.distanceToSqr(civilian) <= this.distanceToSqr(player))) {
+                this.setTarget(civilian);
+            } else if (player != null) {
+                this.setTarget(player);
+            } else {
+                Monster monster = this.level().getEntitiesOfClass(Monster.class,
+                        this.getBoundingBox().inflate(16.0D))
+                        .stream().min(Comparator.comparingDouble(this::distanceToSqr)).orElse(null);
+                if (monster != null) this.setTarget(monster);
+            }
+        } else if (role == NpcRole.GUARD || role == NpcRole.WARRIOR) {
+            CivilizationNpc bandit = this.level().getEntitiesOfClass(CivilizationNpc.class,
+                    this.getBoundingBox().inflate(24.0D),
+                    other -> other != this && other.isAlive() && other.getRole() == NpcRole.BANDIT)
+                    .stream().min(Comparator.comparingDouble(this::distanceToSqr)).orElse(null);
+            if (bandit != null) this.setTarget(bandit);
+        }
     }
 
     @Override

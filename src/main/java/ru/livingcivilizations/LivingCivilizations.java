@@ -8,6 +8,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import ru.livingcivilizations.registry.ModBlocks;
 import ru.livingcivilizations.registry.ModEntities;
 import ru.livingcivilizations.registry.ModItems;
+import ru.livingcivilizations.network.ModNetwork;
 
 @Mod(LivingCivilizations.MOD_ID)
 public class LivingCivilizations {
@@ -18,6 +19,7 @@ public class LivingCivilizations {
         ModBlocks.BLOCKS.register(bus);
         ModEntities.ENTITY_TYPES.register(bus);
         ModItems.ITEMS.register(bus);
+        ModNetwork.register();
         bus.addListener(this::addCreativeItems);
     }
 
@@ -36,6 +38,9 @@ public class LivingCivilizations {
             event.accept(ModItems.DIRT_ROAD_FULL_ITEM);
             event.accept(ModItems.GRAVEL_ROAD_FULL_ITEM);
             event.accept(ModItems.PAVED_ROAD_FULL_ITEM);
+            event.accept(ModItems.DIRT_ROAD_HALF_ITEM);
+            event.accept(ModItems.GRAVEL_ROAD_HALF_ITEM);
+            event.accept(ModItems.PAVED_ROAD_HALF_ITEM);
         }
     }
 }

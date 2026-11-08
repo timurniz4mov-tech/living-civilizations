@@ -401,8 +401,7 @@ public final class SettlementGenerator {
     }
 
     private static void placeRoad(ServerLevel level, BlockPos center, int dx, int dz, net.minecraft.world.level.block.Block road) {
-        BlockPos ground = center.offset(dx, 0, dz);
-        level.setBlock(ground, road.defaultBlockState(), 3);
+        RoadBuilder.place(level, center.offset(dx, 0, dz), road);
     }
 
     private static void spawn(ServerLevel level, EntityType<CivilizationNpc> type, BlockPos feetPos) {

@@ -14,6 +14,7 @@ import ru.livingcivilizations.LivingCivilizations;
 import ru.livingcivilizations.kingdom.KingdomSavedData;
 import ru.livingcivilizations.registry.ModBlocks;
 import ru.livingcivilizations.world.SettlementGenerator;
+import ru.livingcivilizations.world.RoadBuilder;
 
 @Mod.EventBusSubscriber(modid = LivingCivilizations.MOD_ID)
 public class CivilizationCommands {
@@ -137,16 +138,16 @@ public class CivilizationCommands {
                             case "dirt" -> ModBlocks.DIRT_ROAD.get();
                             case "gravel" -> ModBlocks.GRAVEL_ROAD.get();
                             case "paved" -> ModBlocks.PAVED_ROAD.get();
-                            case "dirt_half" -> ModBlocks.DIRT_ROAD.get();
-                            case "gravel_half" -> ModBlocks.GRAVEL_ROAD.get();
-                            case "paved_half" -> ModBlocks.PAVED_ROAD.get();
-                            case "dirt_full" -> ModBlocks.DIRT_ROAD_FULL.get();
-                            case "gravel_full" -> ModBlocks.GRAVEL_ROAD_FULL.get();
-                            case "paved_full" -> ModBlocks.PAVED_ROAD_FULL.get();
+                            case "dirt_half" -> ModBlocks.DIRT_ROAD_HALF.get();
+                            case "gravel_half" -> ModBlocks.GRAVEL_ROAD_HALF.get();
+                            case "paved_half" -> ModBlocks.PAVED_ROAD_HALF.get();
+                            case "dirt_full" -> ModBlocks.DIRT_ROAD.get();
+                            case "gravel_full" -> ModBlocks.GRAVEL_ROAD.get();
+                            case "paved_full" -> ModBlocks.PAVED_ROAD.get();
                             default -> null;
                         };
                         if (block == null) {
-                            ctx.getSource().sendFailure(Component.literal("Типы: dirt_half, gravel_half, paved_half, dirt_full, gravel_full, paved_full (dirt/gravel/paved — старые названия для тонкой дороги)"));
+                            ctx.getSource().sendFailure(Component.literal("Типы: dirt, gravel, paved (полные блоки); dirt_half, gravel_half, paved_half (тонкие)"));
                             return 0;
                         }
                         int length = IntegerArgumentType.getInteger(ctx, "length");
@@ -154,7 +155,7 @@ public class CivilizationCommands {
                         var dir = player.getDirection();
                         for (int i = 1; i <= length; i++) {
                             BlockPos p = start.relative(dir, i);
-                            player.serverLevel().setBlock(p, block.defaultBlockState(), 3);
+                            RoadBuilder.place(player.serverLevel(), p, block);
                         }
                         ctx.getSource().sendSuccess(() -> Component.literal("Проложена дорога: " + type + ", длина " + length), true);
                         return 1;

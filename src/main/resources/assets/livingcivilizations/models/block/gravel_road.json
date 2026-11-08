@@ -1,64 +1,6 @@
 {
+  "parent": "minecraft:block/cube_all",
   "textures": {
-    "top": "livingcivilizations:block/gravel_road",
-    "side": "livingcivilizations:block/gravel_road"
-  },
-  "elements": [
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        2,
-        16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#side"
-        },
-        "up": {
-          "texture": "#top"
-        },
-        "north": {
-          "texture": "#side",
-          "uv": [
-            0,
-            0,
-            16,
-            2
-          ]
-        },
-        "south": {
-          "texture": "#side",
-          "uv": [
-            0,
-            0,
-            16,
-            2
-          ]
-        },
-        "east": {
-          "texture": "#side",
-          "uv": [
-            0,
-            0,
-            16,
-            2
-          ]
-        },
-        "west": {
-          "texture": "#side",
-          "uv": [
-            0,
-            0,
-            16,
-            2
-          ]
-        }
-      }
-    }
-  ]
+    "all": "minecraft:block/gravel"
+  }
 }
