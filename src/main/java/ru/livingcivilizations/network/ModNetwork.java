@@ -2,7 +2,7 @@ package ru.livingcivilizations.network;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.SimpleChannel;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class ModNetwork {
     private static final String PROTOCOL = "1";

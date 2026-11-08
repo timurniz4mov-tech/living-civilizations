@@ -94,15 +94,15 @@ public class CivilizationNpc extends PathfinderMob {
             this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.18D, true));
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CivilizationNpc.class, 10,
-                    true, false, target -> target.getRole() != NpcRole.BANDIT));
+                    true, false, target -> target instanceof CivilizationNpc npc && npc.getRole() != NpcRole.BANDIT));
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10,
-                    true, false, target -> !target.isCreative() && !target.isSpectator()));
+                    true, false, target -> target instanceof Player player && !player.isCreative() && !player.isSpectator()));
             this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Monster.class, true));
         } else if (role == NpcRole.GUARD || role == NpcRole.WARRIOR) {
             this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.12D, true));
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CivilizationNpc.class, 10,
-                    true, false, target -> target.getRole() == NpcRole.BANDIT));
+                    true, false, target -> target instanceof CivilizationNpc npc && npc.getRole() == NpcRole.BANDIT));
             this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true));
         }
     }
